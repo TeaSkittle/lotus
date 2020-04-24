@@ -1,0 +1,91 @@
+- means need to be fixed/added
++ added to game
+& Fixed/added at a later date
+
+May 1, 2019
++ Unix commands in game
+
+May 2, 2019
++ Basics of parser functionality
+
+May 10, 2019
++ Combined commands and parser
+& Start basics of the story/gameplay
++ Made commands less UNIX-like, more unique
+
+June 7, 2019
+& Found bug with open(cat), noun stays same until new open is called.
++ Changed direction of game story
++ Edited opening logo
+
+June 12, 2019
++ Fixed cat bug, doesn't crash anymore
+
+June 13, 2019
++ Added boot sequence
+& Need to have opening introduction to game world.
++ Add username and pass after boot
+
+July 22, 2019
++ Added echo command
+& Attempted to make other PC's for player, ended scratching that idea
+
+July 23, 2019
++ Created player message format, this will be how the story is told.
+
+July 24, 2019
++ Created first story file "readme.txt"
++ Started fleshing out story and character
+
+September 7, 2019
++ Added this project to gitlab
+
+October 6, 2019
++ Fixed some minor bugs
++ Removed system call for clear, used Cls() from tul.h
++ Split game into different files, easier editing and review
++ Updated Git repo
+
+October 9, 2019
++ Added connect function, start of ssh cmd in game
++ Fixed up some comments and made code cleaner
+& Should remove login features
+& Need to figure out how to show files per pc
+& Need to add proper exit function, not just C-c
+
+October 13, 2019
++ Added Echo() to tul.h
++ Completed connect function
++ Started file structure
+& Finish Files() function
+& Have Type() open from story folder
+- Add spaces to echo, expection with quotes or something
+
+October 14, 2019
++ Fixed tabs in tul.h
++ Fixed bug of 'ls' as first command
++ Made cat open files from story folder, still need if/elses here
+& Make Parse() use switch statements instead of if/else
+    + tried this, not worth it, just cleaned up Parse()
+
+October 15, 2019
++ Added a lot more comments
+- Make ssh cleaner in code
+- made ssh cooler, maybe use sleep() to delay connection
+
+Feb 1, 2020
++ Cleaned up code
+    + Removed losts of empty lines
+    + Formatted comments to be more universal
++ Created color.h
+& Fix cat and echo
+
+Feb 2, 2020
++ Changed variables to const and static where needed, fixed input bugs!
++ Fixed cat and echo bugs
++ Added quit function
++ Removed Login function
+
+April 23, 2020
++ Changed Cls() function
++ Moved from gitlab to github

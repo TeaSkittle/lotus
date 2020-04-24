@@ -1,0 +1,5 @@
+Date: 11-15-2145
+From: Red
+
+Hacker,
+Here will be the main text, will have all different logs in this format.
