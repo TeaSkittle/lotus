@@ -89,3 +89,10 @@ Feb 2, 2020
 April 23, 2020
 + Changed Cls() function
 + Moved from gitlab to github
+
+April 25, 2020
++ Completed push and pop
++ Added some error handling
++ Added more colors to game
+- Change commands from struct to array ( simpler )
+- Add way to msee ip of pc player is connected to

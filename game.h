@@ -7,23 +7,25 @@ static const char Dir[ 10 ][ 50 ];    // Directory/File structure of PC's in gam
 static char *token;                   // Used in Input function, random variable name
 static int current_pc = 0;            // Which PC player is connected to
 
+// NOTE: Why did I make these a struct?????
+//       A 2-dimensional array should work insted
 struct Commands {                     // Commands
   const char *description;            // Description of commands
   const char *tag;                    // Name or tag of commands
 };
 struct Commands cmds[ 11 ];
 struct Commands cmds[ 11 ] = {
+  { "help file", "help" },			      
   { "print working directory", "pwd" },
-  { "pop diectory", "popd" },
+  { "move one directory down", "pop" },
+  { "move one directory up", "push" },
   { "list", "ls" },
-  { "help file", "help" },
-  { "remove file", "rm" },
   { "show contents of file", "cat" },
   { "connect to another computer", "ssh" },
-  { "clear screen", "clear" },
   { "disconnect from computer", "exit" },
-  { "push diectory", "pushd" },
-  { "print string to stdout", "echo" }
+  { "clear screen", "clear" },  
+  { "print string to stdout", "echo" },
+  { "quit game", "quit" }
 };
 
 static const char Dir[ 10 ][ 50 ] = {  // File Structure
@@ -36,17 +38,17 @@ static const char Dir[ 10 ][ 50 ] = {  // File Structure
 };
 
 int connect( const char *other_pc ) {   // Connect(ssh) to another PC
-  if ( strcmp(other_pc, "127.0.0.1") == 0 ) {
+  if ( strcmp(other_pc, "192.168.0.1") == 0 ) {
       current_pc = 0;
-      printf(" Welcome home.\n" );
+      printf( CYAN "Connecting...\n" );      
       loc = 4;                          // Start player in same location for each new pc
     } else if ( strcmp(other_pc, "192.168.10.5") == 0 ) {
       current_pc = 1;
-      printf( "Connecting...\n" );
+      printf( CYAN "Connecting...\n" );
       loc = 4;
     } else if ( strcmp(other_pc, "192.168.0.2") == 0 ) {
       current_pc = 2;
-      printf( "Connecting...\n" );
+      printf( CYAN "Connecting...\n" );
       loc = 4;
     } return 0;
 }
@@ -86,26 +88,32 @@ int Parse( void ) {
   const char *noun = strtok( b, " \n" );
   if ( verb != NULL ) {
     if ( strcmp(verb, "exit") == 0 ) {        // Disconnect from current pc
-      printf("exit\n");
-      printf("Disconnecting...\n");
+      if ( current_pc != 0 ) {
+	printf( CYAN "Disconnecting...\n" );
+	current_pc = 0;
+      } else { printf( RED "At home ip\n" ); }
     } if ( strcmp(verb, "quit") == 0 ) {      // Exit game, for testing
       exit( 0 );
     } if ( strcmp(verb, "pwd") == 0 ) {       // Print working directory
       printf("%s\n", Dir[loc]);
-    } if ( strcmp(verb, "popd") == 0 ) {      // Pop directory
-      loc--;
-      printf("%s\n", Dir[loc]);
-    }  if ( strcmp(verb, "pushd") == 0 ) {    // Push directory
-      loc++;
-      printf("%s\n", Dir[loc]);
+    } if ( strcmp(verb, "pop") == 0 ) {      // Pop directory
+      if ( loc > 0 ) { 
+	loc--;
+	printf("%s\n", Dir[loc]);
+      } else { printf( RED "On bottom of directory stack\n" ); }
+    }  if ( strcmp(verb, "push") == 0 ) {    // Push directory
+      if ( loc < 5 ) {
+	loc++;
+	printf("%s\n", Dir[loc]);
+      } else { printf( RED "On top of directory stack\n" ); }
     } if ( strcmp(verb, "ls") == 0 ) {        // List files in current directory
       Files();
       printf("\n");
-    } if ( strcmp(verb, "rm") == 0 ) {        // Remove file
-      printf("%s\n", cmds[5].description);
     } if ( strcmp(verb, "cat") == 0 ) {       // Print out file
-      Write( "story/", noun );
-      printf("\n");                           
+      if ( noun != NULL ) {
+	Write( "story/", noun );
+	printf("\n");
+      } else { printf( RED "No argument supplied\n" ); }
     } if ( strcmp(verb, "ssh") == 0 ) {       // Connect to another pc via ip address
       connect(noun);
     } if ( strcmp(verb, "help") == 0 ) {      // List Commands with "help"
@@ -113,7 +121,9 @@ int Parse( void ) {
 	printf("%s\t\t- %s\n", cmds[x].tag, cmds[x].description);
       }
     } if ( strcmp(verb, "echo") == 0 ) {      // Echo text
-      Echo(noun);
+      if ( noun != NULL ) {
+	Echo(noun);
+      } else { printf( RED "No argument supplied\n" ); }      
     } if ( strcmp(verb, "clear") == 0 ) {     // Clear screen
       Cls();
     } 

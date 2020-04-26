@@ -10,6 +10,7 @@ int main( void ) {
   Boot(); //Comment Boot() out to speed up testing, boot works already 100%
   Cls();
   ColorType( "open.txt", MAGENTA );
+  printf( WHITE "type \"help\" to see commands\n\n" );
   while( 1 ) {
     printf( GREEN "lotusOS~> " WHITE);
     Input( a );
