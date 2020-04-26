@@ -7,7 +7,7 @@
 
 int main( int argc, char *argv[] ) {
   // This is for testing, will remove when game is finished
-  if(argc != 1){
+  if( argc != 1 ){
     Cls(); 
     Boot();
     Cls();
@@ -16,7 +16,7 @@ int main( int argc, char *argv[] ) {
   ColorType( "open.txt", MAGENTA );
   printf( WHITE "type \"help\" to see commands\n\n" );
   while( 1 ) {
-    printf( GREEN "lotusOS~> " WHITE);
+    printf( GREEN "lotusOS~> " WHITE );
     input( a );
     parse();
   } return 0;
