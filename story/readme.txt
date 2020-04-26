@@ -9,8 +9,8 @@ gain some usefull knowledge to share with the world.
 
 In today's day and age my operating system (LotusOS), is archaic and only
 old school hackers will truly find their way around. I designed it with
-commands and a filesystem inspired by UNIX and TempleOS, which are operating
-systems most of us only know of from computer science history classes. I
+commands and a filesystem inspired by UNIX, which is an operating
+system most of us only know of from computer science history classes. I
 Will give you one tip to get started, from here on hacking is the only way you
 will undercover the mystery. The first and most important command any hacker
 should know is "help".
