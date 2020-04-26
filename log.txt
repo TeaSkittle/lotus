@@ -143,3 +143,4 @@ April 26, 2020
 + Added debug switch
 + Made connect_prompt()
 + Cleaned up function ( removed pointless returns )
+- Change functions to be camel-case
