@@ -1,14 +1,11 @@
-// Core gameplay for LotusOS
 #define MAX 1024                      // Size for input values
 static char a[ MAX ], b[ MAX ];       // Input a and b
 struct Commands;                      // Struct of shell commands for game
 static int loc = 4;                   // Start player in Home directory
 static const char Dir[ 10 ][ 50 ];    // Directory/File structure of PC's in game
 static char *token;                   // Used in Input function, random variable name
-static int current_pc = 0;            // Which PC player is connected to
+int current_pc = 0;            // Which PC player is connected to
 
-// NOTE: Why did I make these a struct?????
-//       A 2-dimensional array should work insted
 struct Commands {                     // Commands
   const char *description;            // Description of commands
   const char *tag;                    // Name or tag of commands
@@ -23,8 +20,8 @@ struct Commands cmds[ 11 ] = {
   { "show contents of file", "cat" },
   { "connect to another computer", "ssh" },
   { "disconnect from computer", "exit" },
+  { "show current ip", "ip" },
   { "clear screen", "clear" },  
-  { "print string to stdout", "echo" },
   { "quit game", "quit" }
 };
 
@@ -38,7 +35,8 @@ static const char Dir[ 10 ][ 50 ] = {  // File Structure
 };
 
 int connect( const char *other_pc ) {   // Connect(ssh) to another PC
-  if ( strcmp(other_pc, "192.168.0.1") == 0 ) {
+  if ( other_pc != NULL ) {
+    if ( strcmp(other_pc, "192.168.0.1") == 0 ) {
       current_pc = 0;
       printf( CYAN "Connecting...\n" );      
       loc = 4;                          // Start player in same location for each new pc
@@ -50,7 +48,20 @@ int connect( const char *other_pc ) {   // Connect(ssh) to another PC
       current_pc = 2;
       printf( CYAN "Connecting...\n" );
       loc = 4;
-    } return 0;
+  } else {
+    printf( RED "Unkown ip\n" );
+    }
+  } else { printf( RED "No argument supplied\n" ); }      
+  return 0;
+}
+
+int view_ip( int pc ) {
+  switch( pc ){
+  case 0: printf( "192.168.0.1\n" ); break;
+  case 1: printf( "192.168.10.5\n" ); break;
+  case 2: printf( "192.168.0.2\n" ); break;    
+  default: break;
+  } return pc;
 }
 
 // Use Type from tul.h, but open from a subfoler.
@@ -64,20 +75,13 @@ int Write( const char *dir, const char *name ) {
 }
 
 // This is for 'ls' and shows certain files
-// depending on location in pc, and what pc
 int Files() {
-  static const int *pc = &current_pc;
-  static const int *dir = &loc;
-  if ( *pc == 0 ) {
-    if ( *dir == 4 ) {
-	  printf("readme.txt");
-    } else if ( *dir == 5 ) {
-	  printf("empire.txt");
-    } else if ( *pc == 1 ) {
-      if ( *dir == 4 ) {
-	printf("format.txt");  // Need to add new story file here
-      } 
-    }
+  if ( current_pc == 0 ) {  // 192.168.0.1
+    if ( loc == 4 ) { printf( "readme.txt\n" ); }
+    else if ( loc == 5 ) { printf( "empire.txt\n" ); }
+  }
+  else if ( current_pc == 1 ) {  // 192.168.10.5
+    if ( loc == 4 ) { printf( "format.txt\n" ); } // Need to add new story file here 
   } return 0;
 }
 
@@ -108,7 +112,6 @@ int Parse( void ) {
       } else { printf( RED "On top of directory stack\n" ); }
     } if ( strcmp(verb, "ls") == 0 ) {        // List files in current directory
       Files();
-      printf("\n");
     } if ( strcmp(verb, "cat") == 0 ) {       // Print out file
       if ( noun != NULL ) {
 	Write( "story/", noun );
@@ -120,16 +123,12 @@ int Parse( void ) {
       for(int x = 0; x < 11; x++) {
 	printf("%s\t\t- %s\n", cmds[x].tag, cmds[x].description);
       }
-    } if ( strcmp(verb, "echo") == 0 ) {      // Echo text
-      if ( noun != NULL ) {
-	Echo(noun);
-      } else { printf( RED "No argument supplied\n" ); }      
     } if ( strcmp(verb, "clear") == 0 ) {     // Clear screen
       Cls();
-    } 
-  } else {
-    //Can do error handling here, may leave blank
-  }
+    } if ( strcmp(verb, "ip") == 0) {
+      view_ip( current_pc );
+      }
+  } else {}
   return 0;
 }
 
@@ -188,3 +187,4 @@ void Boot() {
   printf( GREEN "--Complete--\n" WHITE );
   sleep( 1 );
 }
+

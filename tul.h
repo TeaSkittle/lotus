@@ -1,7 +1,7 @@
 // Header file for shell commands
 // Author: Travis Dowd
 // Date: 9-20-19
-#include <unistd.h>
+#include <unistd.h> // for sleep()
 
 // Cat out file
 const char *Type( const char *filename ) {
@@ -90,3 +90,4 @@ const char *Echo( const char *str ) {
   printf( "%s\n", str );
   return 0;
 }
+

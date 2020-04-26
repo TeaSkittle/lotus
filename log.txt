@@ -59,7 +59,6 @@ October 13, 2019
 + Started file structure
 & Finish Files() function
 & Have Type() open from story folder
-- Add spaces to echo, expection with quotes or something
 
 October 14, 2019
 + Fixed tabs in tul.h
@@ -70,8 +69,7 @@ October 14, 2019
 
 October 15, 2019
 + Added a lot more comments
-- Make ssh cleaner in code
-- made ssh cooler, maybe use sleep() to delay connection
+& Make ssh cleaner in code
 
 Feb 1, 2020
 + Cleaned up code
@@ -94,5 +92,11 @@ April 25, 2020
 + Completed push and pop
 + Added some error handling
 + Added more colors to game
-- Change commands from struct to array ( simpler )
-- Add way to msee ip of pc player is connected to
+& Add way to see ip of pc player is connected to
+
+April 26, 2020
++ Fixed bug with ssh
++ Fixes Files() w/ ssh
++ Removed echo command (pointless to game)
++ Cleaned up ls
+- Put ip's in array, so only have to be writeen out onmce
