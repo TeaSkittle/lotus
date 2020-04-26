@@ -5,15 +5,19 @@
 #include "tul.h"    // Shell style commands
 #include "game.h"   // Core gameplay
 
-int main( void ) {
-  Cls(); 
-  //Boot(); //Comment Boot() out to speed up testing, boot works already 100%
+int main( int argc, char *argv[] ) {
+  // This is for testing, will remove when game is finished
+  if(argc != 1){
+    Cls(); 
+    Boot();
+    Cls();
+  }
   Cls();
   ColorType( "open.txt", MAGENTA );
   printf( WHITE "type \"help\" to see commands\n\n" );
   while( 1 ) {
     printf( GREEN "lotusOS~> " WHITE);
-    Input( a );
-    Parse();
+    input( a );
+    parse();
   } return 0;
 }

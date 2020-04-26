@@ -2,9 +2,10 @@
 static char a[ MAX ], b[ MAX ];       // Input a and b
 struct Commands;                      // Struct of shell commands for game
 static int loc = 4;                   // Start player in Home directory
-static const char Dir[ 10 ][ 50 ];    // Directory/File structure of PC's in game
+static const char dir[ 10 ][ 50 ];    // Directory/File structure of PC's in game
+static const char ip[ 3 ][ 15 ];      // Array of ip addresses
 static char *token;                   // Used in Input function, random variable name
-int current_pc = 0;            // Which PC player is connected to
+int current_pc = 0;                   // Which PC player is connected to
 
 struct Commands {                     // Commands
   const char *description;            // Description of commands
@@ -12,7 +13,7 @@ struct Commands {                     // Commands
 };
 struct Commands cmds[ 11 ];
 struct Commands cmds[ 11 ] = {
-  { "help file", "help" },			      
+  { "show list of commands", "help" },
   { "print working directory", "pwd" },
   { "move one directory down", "pop" },
   { "move one directory up", "push" },
@@ -25,7 +26,7 @@ struct Commands cmds[ 11 ] = {
   { "quit game", "quit" }
 };
 
-static const char Dir[ 10 ][ 50 ] = {  // File Structure
+static const char dir[ 10 ][ 50 ] = {  // File Structure
   "/",
   "/bin",
   "/sys",
@@ -34,45 +35,22 @@ static const char Dir[ 10 ][ 50 ] = {  // File Structure
   "/home/user/Documents",
 };
 
-int connect( const char *other_pc ) {   // Connect(ssh) to another PC
-  if ( other_pc != NULL ) {
-    if ( strcmp(other_pc, "192.168.0.1") == 0 ) {
-      current_pc = 0;
-      printf( CYAN "Connecting...\n" );      
-      loc = 4;                          // Start player in same location for each new pc
-    } else if ( strcmp(other_pc, "192.168.10.5") == 0 ) {
-      current_pc = 1;
-      printf( CYAN "Connecting...\n" );
-      loc = 4;
-    } else if ( strcmp(other_pc, "192.168.0.2") == 0 ) {
-      current_pc = 2;
-      printf( CYAN "Connecting...\n" );
-      loc = 4;
-  } else {
-    printf( RED "Unkown ip\n" );
-    }
-  } else { printf( RED "No argument supplied\n" ); }      
-  return 0;
+void connect_prompt() {
+  printf( CYAN "Connecting...\n" );
+  loc = 4;
 }
 
 int view_ip( int pc ) {
-  switch( pc ){
-  case 0: printf( "192.168.0.1\n" ); break;
-  case 1: printf( "192.168.10.5\n" ); break;
-  case 2: printf( "192.168.0.2\n" ); break;    
-  default: break;
-  } return pc;
+  printf( "%s\n", ip[ pc ] );
+  return pc;
 }
 
-// Use Type from tul.h, but open from a subfoler.
-// Story files are located in story folder
-int Write( const char *dir, const char *name ) {
-  static char subdir[ MAX ], file[ MAX ];
-  strcpy( subdir, dir );
-  strcpy( file, name );
-  Type( strcat(subdir, file) );
-  return 0;
-}
+// Array of pcs player will connect to
+static const char ip[ 3 ][ 15 ] = {
+  "192.168.0.1",  // Home, starting pc
+  "192.168.10.5",
+  "127.0.2.12"
+};
 
 // This is for 'ls' and shows certain files
 int Files() {
@@ -82,12 +60,36 @@ int Files() {
   }
   else if ( current_pc == 1 ) {  // 192.168.10.5
     if ( loc == 4 ) { printf( "format.txt\n" ); } // Need to add new story file here 
-  } return 0;
+  } return loc; 
+}
+
+void connect( const char *other_pc ) {   // Connect(ssh) to another PC
+  if ( other_pc != NULL ) {
+    if ( strcmp(other_pc, ip[0] ) == 0 ) {
+      current_pc = 0;
+      connect_prompt();
+    } else if ( strcmp(other_pc, ip[1] ) == 0 ) {
+      current_pc = 1;
+      connect_prompt();
+    } else if ( strcmp(other_pc, ip[2] ) == 0 ) {
+      current_pc = 2;
+      connect_prompt();
+  } else {
+    printf( RED "Unkown ip\n" );
+    }
+  } else { printf( RED "No argument supplied\n" ); }      
+}
+
+// Use Type from tul.h, but open from a subfoler.
+void Write( const char *dir, const char *name ) {
+  static char subdir[ MAX ], file[ MAX ];
+  strcpy( subdir, dir );
+  strcpy( file, name );
+  Type( strcat(subdir, file) );
 }
 
 // Parser, can only take two arguements,
-//   ex: "cat open.txt"
-int Parse( void ) {
+void parse( void ) {
   const char *verb = strtok( a, " \n" );
   const char *noun = strtok( b, " \n" );
   if ( verb != NULL ) {
@@ -99,16 +101,16 @@ int Parse( void ) {
     } if ( strcmp(verb, "quit") == 0 ) {      // Exit game, for testing
       exit( 0 );
     } if ( strcmp(verb, "pwd") == 0 ) {       // Print working directory
-      printf("%s\n", Dir[loc]);
+      printf("%s\n", dir[loc]);
     } if ( strcmp(verb, "pop") == 0 ) {      // Pop directory
       if ( loc > 0 ) { 
 	loc--;
-	printf("%s\n", Dir[loc]);
+	printf("%s\n", dir[loc]);
       } else { printf( RED "On bottom of directory stack\n" ); }
     }  if ( strcmp(verb, "push") == 0 ) {    // Push directory
       if ( loc < 5 ) {
 	loc++;
-	printf("%s\n", Dir[loc]);
+	printf("%s\n", dir[loc]);
       } else { printf( RED "On top of directory stack\n" ); }
     } if ( strcmp(verb, "ls") == 0 ) {        // List files in current directory
       Files();
@@ -129,7 +131,6 @@ int Parse( void ) {
       view_ip( current_pc );
       }
   } else {}
-  return 0;
 }
 
 // Remove spaces from b
@@ -145,7 +146,7 @@ void RemoveSpaces( char *source ) {
 }
 
 // User Input
-int Input( char *str ) {
+void input( char *str ) {
   char split[ MAX ] = " ";
   char *ptr = b; 
   memset( &ptr[0], 0, MAX );
@@ -161,7 +162,6 @@ int Input( char *str ) {
       } RemoveSpaces( ptr );
     }
   }   
-  return 0;
 }
 
 // Virtualized boot sequence
