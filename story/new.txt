@@ -1,0 +1,15 @@
+Date: 5-22-2145
+From: Red
+
+Greetings Hacker,
+I must say, I am already impressed that you have made it this far. Most
+people nowadays would have issues finding their way around LotusOS, so
+you are smarter than most. I hope that intelligence will guide you along
+the right path.
+
+Now it's time to connect to one of the pc's in Proxy's headquarters. Here
+is the ip: 127.0.2.12
+
+From here on out things wont be quite so easy. Once you are in the system,
+find the file named: new_hire.txt. In there will lay the next clue for you.
+
