@@ -6,6 +6,7 @@ static const char dir[ 10 ][ 50 ];    // Directory/File structure of PC's in gam
 static const char ip[ 3 ][ 15 ];      // Array of ip addresses
 static char *token;                   // Used in Input function, random variable name
 int current_pc = 0;                   // Which PC player is connected to
+void prompt( char hostname[10] );     // Command prompt
 
 struct Commands {                     // Commands
   const char *description;            // Description of commands
@@ -186,5 +187,14 @@ void Boot() {
   sleep( 1 );
   printf( GREEN "--Complete--\n" WHITE );
   sleep( 1 );
+}
+
+void prompt( char hostname[10] ){
+    printf( GREEN "%s", hostname );
+    printf( WHITE "\n" );
+    input( a );
+    printf( "\n" );
+    parse();
+    printf( "\n" );
 }
 

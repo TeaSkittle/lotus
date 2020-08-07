@@ -15,9 +15,9 @@ int main( int argc, char *argv[] ) {
   Cls();
   ColorType( "open.txt", MAGENTA );
   printf( WHITE "type \"help\" to see commands\n\n" );
-  while( 1 ) {
-    printf( GREEN "lotusOS~> " WHITE );
-    input( a );
-    parse();
+  char name[] = "lotusOS~> ";
+  for( ;; ) {
+    prompt( name );
   } return 0;
 }
+
